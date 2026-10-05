@@ -201,6 +201,14 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# macOS metadata
+.DS_Store
+
+# Local Docker image exports and generated run artifacts
+environments/prestashop/prestashop/
+debug_*.png
+
+
 # Marimo
 marimo/_static/
 marimo/_lsp/

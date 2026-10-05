@@ -1,27 +1,32 @@
 {
-  "__SHOPPING__":{
-    "url":"http://localhost:8084",
+  "__PRESTASHOP__": {
+    "url": "http://localhost:8080",
+    "username": "account.test.1@mynes.com",
+    "password": "ThisIsAMyShopPassword123!"
+  },
+  "__SHOPPING__": {
+    "url": "http://localhost:8084",
     "username": "account.test.2@mynes.com",
-    "password":"Admin@123"
+    "password": "Admin@123"
   },
-  "__SHOPPING_ADMIN__":{
-    "url":"http://localhost:8084/admin_1n47uy",
+  "__SHOPPING_ADMIN__": {
+    "url": "http://localhost:8084/admin_1n47uy",
     "username": "admin",
-    "password":"Admin@123"
+    "password": "Admin@123"
   },
-  "__PROJECT__":{
-    "url":"http://localhost:8089",
+  "__PROJECT__": {
+    "url": "http://localhost:8089",
     "username": "admin",
-    "password":"Admin123"
+    "password": "Admin123"
   },
-  "__ERP__":{
-    "url":"http://localhost:8070",
+  "__ERP__": {
+    "url": "http://localhost:8070",
     "username": "dataset.agent@mynes.com",
-    "password":"Admin@123"
+    "password": "Admin@123"
   },
-  "__LMS__":{
-    "url":"http://localhost:8085/home",
+  "__LMS__": {
+    "url": "http://localhost:8085/home",
     "username": "bbalet",
-    "password":"bbalet"
+    "password": "bbalet"
   }
 }

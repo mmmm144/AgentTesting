@@ -1,0 +1,64 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{longtable}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{pdflscape} % For landscape
+
+\geometry{a4paper, margin=0.5in}
+
+\begin{document}
+
+\begin{landscape}
+\section*{PrestaShop Agent Test Cases \& Results (Comprehensive)}
+
+\begin{longtable}{|l|p{3cm}|l|l|l|l|l|l|p{4cm}|l|}
+\hline
+\textbf{ID} & \textbf{Desc} & \textbf{Type} & \textbf{URL} & \textbf{Login} & \textbf{Steps} & \textbf{StrMatch} & \textbf{URLMatch} & \textbf{DomMatch} & \textbf{Status} \\
+\hline
+\endhead
+ps\_01 & Subscribe to the website via the footer subscription field with email 'account.test.4@mynes.com'. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.message-success.success.message \textgreater{} div, .alert-success')?.innerText || '', Match: Thank you for your subscription. & \textcolor{green}{\checkmark} PASS \\
+\hline
+ps\_02 & Search for product 'Printed Dress' and verify result contains the product name. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: Array.from(document.querySelectorAll('.product-list .product-name, .product-miniature .name')).map(e=\textgreater{}e.innerText).join(' | '), Match: Printed Dress & \textcolor{green}{\checkmark} PASS \\
+\hline
+ps\_03 & Open a product page for 'Printed Dress' and add it to cart; verify cart success message. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.alert.alert-success, .toast-success, .cart-notification .alert-success')?.innerText || '', Match: Product successfully added to your cart & \textcolor{green}{\checkmark} PASS \\
+\hline
+ps\_04 & Add a product to the cart from the category listing and verify cart count increased. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.cart-qty, .cart-count, #cart .quantity')?.innerText || '', Match: 1 & \textcolor{green}{\checkmark} PASS \\
+\hline
+ps\_05 & Proceed to checkout as guest and verify the checkout page heading is shown. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('h1, .page-heading, .checkout-title')?.innerText || '', Match: Checkout & \textcolor{green}{\checkmark} PASS \\
+\hline
+ps\_06 & Create a new account with email 'new.user.test1@mynes.com' and verify account creation success message. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.account-created, .alert-success, .confirmation')?.innerText || '', Match: Your account has been created & \textcolor{green}{\checkmark} PASS \\
+\hline
+ps\_07 & Log in with an existing account and verify user name appears in header. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.account, .user-info .username, .header\_user\_info .user-name')?.innerText || '', Match: Welcome & \textcolor{green}{\checkmark} PASS \\
+\hline
+ps\_08 & Use the contact form to send a message and verify confirmation is displayed. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.contact-confirmation, .alert.alert-success, .contact-form .confirmation')?.innerText || '', Match: Your message has been successfully sent & \textcolor{green}{\checkmark} PASS \\
+\hline
+ps\_09 & Change the site currency to 'Euro' and verify the currency symbol updates on product prices. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.product-price, .price')?.innerText || '', Match: € & \textcolor{red}{\texttimes} FAIL \\
+\hline
+ps\_10 & Filter a category by 'Size: M' and verify at least one product shows the chosen size availability. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: Array.from(document.querySelectorAll('.product-variants, .product-sizes, .variant-list')).map(e=\textgreater{}e.innerText).join(' | '), Match: M & \textcolor{red}{\texttimes} FAIL \\
+\hline
+ps\_11 & Sort a product listing by 'Price: Lowest' and verify results contain price values (presence of price text). & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.product-price, .price')?.innerText || '', Match: \$ & \textcolor{green}{\checkmark} PASS \\
+\hline
+ps\_12 & Add product to wishlist (requires login) and verify wishlist contains the product. & operation & \_\_SHOPPING\_\_ & True &  &  &  & Extractor: document.querySelector('.wishlist .product-name, .favorite-list .product-name')?.innerText || '', Match: Printed Dress & \textcolor{red}{\texttimes} FAIL \\
+\hline
+ps\_13 & Compare two products and verify the comparison table shows both product names. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: Array.from(document.querySelectorAll('.compare-list .product-name, .comparison-table .product-name')).map(e=\textgreater{}e.innerText).join(' | '), Match: Printed Dress & \textcolor{red}{\texttimes} FAIL \\
+\hline
+ps\_14 & Submit a product review (requires login) and verify the review confirmation message. & operation & \_\_SHOPPING\_\_ & True &  &  &  & Extractor: document.querySelector('.review-success, .comment-result, .alert-success')?.innerText || '', Match: Your review has been added & \textcolor{red}{\texttimes} FAIL \\
+\hline
+ps\_15 & Apply a coupon code during checkout and verify the order summary shows the discount. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.cart-discounts, .discount-applied, .cart-summary .discount')?.innerText || '', Match: Discount & \textcolor{red}{\texttimes} FAIL \\
+\hline
+ps\_16 & Navigate to a category page and verify the category title is displayed. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.category-name, .page-heading, h1')?.innerText || '', Match: Category & \textcolor{green}{\checkmark} PASS \\
+\hline
+ps\_17 & Switch site language to French and verify a known French string appears (e.g., 'Mon compte'). & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('body')?.innerText || '', Match: Mon compte & \textcolor{red}{\texttimes} FAIL \\
+\hline
+ps\_18 & Use the 'Contact us' menu to open customer service and verify the support page title. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.contact-title, .page-heading, h1')?.innerText || '', Match: Customer service & \textcolor{red}{\texttimes} FAIL \\
+\hline
+ps\_19 & View product images gallery and verify the gallery shows at least one larger image element. & operation & \_\_SHOPPING\_\_ & False &  &  &  & Extractor: document.querySelector('.product-main .thumb, .product-cover img, .product-image-photo')?.getAttribute('src') || '', Match: .jpg & \textcolor{red}{\texttimes} FAIL \\
+\hline
+ps\_20 & Sign out from an account and verify the login link/button is shown again. & operation & \_\_SHOPPING\_\_ & True &  &  &  & Extractor: document.querySelector('.login, .login-link, .header\_user\_info .login')?.innerText || '', Match: Sign in & \textcolor{green}{\checkmark} PASS \\
+\hline
+\end{longtable}
+\end{landscape}
+\end{document}

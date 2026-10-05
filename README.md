@@ -1,131 +1,130 @@
-# WebAppEval: A Benchmark for Autonomous Web Agents and Agentic Test Automation
+# PrestaShop Web Agent Evaluation
 
-## Introduction
+An automated evaluation project for testing web agents on 20 end-to-end
+PrestaShop tasks. The project combines a reproducible Docker environment,
+Playwright-based agents, and DOM-based WebAppEval matchers.
 
-**WebAppEval** is a benchmark designed to evaluate **autonomous web agents** and **LLM-driven test automation systems**.  
-It provides realistic, containerized web applications—such as **Magento**, **Odoo**, **Jorani**, and **Redmine**—and a standardized evaluation protocol that measures task performance in a reproducible and automated way.
+## Highlights
 
-While existing benchmarks like *MiniWoB++*, *Online-Mind2Web*, and *WebArena* have driven progress in this field, they often lack realism or reproducibility.  
-**WebAppEval** fills this gap by combining:
+- 20 tasks covering navigation, search, cart, checkout, authentication, product
+  interactions, and account actions.
+- Three agent implementations: a deterministic Playwright baseline, a Gemini
+  vision agent, and a local Ollama/LLaVA agent.
+- Automatic grading with DOM, URL, string, and semantic matchers.
+- Reproducible PrestaShop and MariaDB environment through Docker Compose.
 
-- **Realistic enterprise-scale web apps**
-- **JSON-based task schemas**
-- **Automatic matchers for evaluation**
-- **Unified scoring metrics (TSR, SCR)**
-  **Reproducible Dockerized setup**
+The submitted benchmark report records **15/20 tasks passed (75% TSR)**. A
+later local baseline run documented in [`REPORT.md`](REPORT.md) records
+**12/20 functional passes (60%)** after environment/module differences. Both
+figures are retained because they describe different evaluation snapshots.
 
-## 🚀 Key Features
+The complete assignment report is available at
+[`docs/report.pdf`](docs/report.pdf).
 
-- **Multi-domain coverage:** Magento (e-commerce), Odoo (ERP), Jorani (HRM), Redmine (project management).
-- **Declarative JSON task schema** defining start state, action goals, and evaluation criteria.
-- **Automatic evaluation** with multiple matchers:
-  - `string_match`, `url_match`, `dom_match`, and `semantic_match`.
-- **Supports multiple agent frameworks:** HxAgent, SeeAct, Li et al., and custom LLM agents.
-- **Fully Dockerized:** one command to spin up all web apps and evaluation modules.
+## Architecture
 
-## ⚙️ Setup
-
-### 1️. Requirements
-
-- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
-- Python ≥ **3.10**
-- `pip` for installing dependencies
-
-### 2️. Clone the repository
-
-```bash
-git clone https://github.com/nguyen0710/WebAppEval.git
-cd WebAppEval
+```mermaid
+flowchart LR
+    A[Web Agent] -->|Playwright actions| B[PrestaShop]
+    B -->|DOM and page state| C[WebAppEval Evaluator]
+    D[Task Dataset] --> A
+    D --> C
+    C --> E[PASS / FAIL and TSR]
 ```
 
-### 3️. Launch the environments
+## Repository Layout
 
-You can run each web application individually by navigating into its environment folder.
-#### Example: Magento
+```text
+.
+├── ai_agent_gemini.py       # Gemini vision agent
+├── ai_agent_ollama.py       # Local Ollama/LLaVA agent
+├── ai_agent_scaffold.py     # Minimal agent scaffold
+├── run_agent.py             # Deterministic Playwright baseline
+├── dataset/
+│   └── prestashop_tasks.json
+├── environments/
+│   └── prestashop/
+│       └── docker-compose.yml
+├── evaluate/                # Evaluation engine and matchers
+├── docs/
+│   └── report.pdf
+├── AGENT_COMPARISON.md
+└── REPORT.md
+```
+
+## Requirements
+
+- Python 3.11 or newer
+- Docker Desktop with Docker Compose
+- Git
+- Ollama with a multimodal model such as LLaVA (optional)
+- Gemini API key (optional)
+
+## Setup
+
 ```bash
-cd environments/magento2
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+playwright install chromium
+```
+
+On Windows, activate the environment with `venv\\Scripts\\activate`.
+
+Start PrestaShop:
+
+```bash
+cd environments/prestashop
 docker compose up -d
+cd ../..
 ```
-After a few minutes, the application will be available in your browser. 
-The URL and credentials for each environment are defined in **env_config.json**.
 
-## Usage
-### 1️. Example task definition
-Each task in WebAppEval is defined using a unified JSON schema and stored in the `datasets/tasks.json`.
+Wait until the site is available at <http://localhost:8080>.
 
-```json
-{
-  "task_id": "7",
-  "task_description": "Subscribe to the website via the subscription field with email 'account.test.4@mynes.com'.",
-  "task_type": "operation",
-  "start_url": "__SHOPPING__",
-  "require_login": false,
-  "eval": {
-    "eval_type": ["dom_match"],
-    "dom_match": {
-      "url": "last",
-      "dom_extractor": "document.querySelector('.message-success.success.message > div').innerText",
-      "match_type": "contains",
-      "match_value": "Thank you for your subscription.",
-      "description": "Verify that the success message is displayed after subscribing."
-    }
-  }
-}
+## Run the Agents
+
+Deterministic baseline:
+
+```bash
+python run_agent.py
 ```
-**Explanation:**
-- `task_id`: Unique ID of the task.
-- `task_description`: The goal the agent must perform.
-- `task_type`: The nature of the action (e.g., lookup, operation).
-- `start_url`: Initial page (mapped from env_config.json).
-- `eval`: Defines the evaluation method. Here, the `dom_match` matcher extracts the success message from the page
-and checks whether it contains the text "Thank you for your subscription.".
 
-### 2. Evaluate a task
-Each task includes an **`eval`** field that defines how success is determined after the agent completes the action.  
-The evaluator uses one or more *matchers* — rules that verify different aspects of the final web page or state,  
-such as **`string_match`**, **`dom_match`**, **`url_match`**, or **`semantic_match`**.
+Gemini vision agent:
 
-For example:
-
-```json
-"eval": {
-  "eval_type": ["dom_match", "url_match"],
-  "dom_match": {
-    "url": "last",
-    "dom_extractor": "document.querySelector('.message-success.success.message > div').innerText",
-    "match_type": "contains",
-    "match_value": "Thank you for your subscription.",
-    "description": "Verify that the success message is displayed after subscribing."
-  },
-  "url_match": {
-    "match_type": "contains",
-    "match_value": "newsletter/subscriber/success",
-    "description": "Ensure the page navigates to the subscription success URL."
-  }
-}
+```bash
+cp .env.example .env
+# Add your GEMINI_API_KEY to .env
+python ai_agent_gemini.py
 ```
-**Explanation:**
 
-- `eval_type`: A list of matchers to apply (e.g., `["string_match"]` or multiple like `["dom_match", "url_match"]`).
-- `match_type`: The comparison rule (`exact`, `contains`).
-- `match_value`: The expected value used for comparison.
-- `description`: A human-readable explanation of the check’s purpose.
+Local Ollama/LLaVA agent:
 
-In this example, the evaluator will perform **two checks**:
-1. Extract the success message and ensure it contains the correct text.  
-2. Verify that the browser navigated to a URL containing `newsletter/subscriber/success`.
+```bash
+ollama pull llava
+python ai_agent_ollama.py
+```
 
-✅ Both conditions must pass for the task to be considered **successful**.
+## Evaluation Scope
 
-**Example:**
-The evaluation logic is provided in the **`evaluate/`** directory as a reference for agents using Selenium or Playwright.
+The task set is grouped into four areas:
 
-### 3️. Supported Matchers
+| Group | Tasks | Examples |
+|---|---:|---|
+| Visitor actions | `ps_01`-`ps_05` | Newsletter, search, cart, guest checkout |
+| Account and forms | `ps_06`-`ps_10` | Registration, login, contact, filters |
+| Product interactions | `ps_11`-`ps_15` | Sorting, wishlist, comparison, reviews, coupons |
+| Navigation and user actions | `ps_16`-`ps_20` | Category, language, support, gallery, logout |
 
-| Matcher | Description | Typical Use Case |
-|----------|--------------|------------------|
-| **`string_match`** | Compares textual outputs (e.g., success messages, labels). | Checking if a confirmation message appears. |
-| **`dom_match`** | Extracts and validates elements or attributes from the DOM. | Verifying dynamic content on a web page. |
-| **`url_match`** | Ensures the agent navigated to the correct URL. | Checking redirection or flow correctness. |
-| **`semantic_match`** | Uses LLM-based similarity for flexible text comparison. | Matching paraphrased or non-exact outputs. |
+Tasks are graded from the browser state using the definitions in
+`dataset/prestashop_tasks.json`. Some tasks depend on optional PrestaShop
+modules or multilingual/currency configuration, so results can vary between
+environment snapshots.
+
+## Notes
+
+- Do not commit `.env`; it is ignored by Git.
+- Credentials in the Docker Compose and task fixtures are local test-only
+  values and must not be reused for real services.
+- The PrestaShop OCI image cache is intentionally excluded. Docker Compose
+  pulls the required images when the environment starts.
 

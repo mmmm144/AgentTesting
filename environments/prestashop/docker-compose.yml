@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  prestashop:
+    image: prestashop/prestashop:latest
+    container_name: prestashop_app
+    ports:
+      - "8080:80"
+    links:
+      - db:mysql
+    depends_on:
+      - db
+    environment:
+      - DB_SERVER=db
+      - DB_USER=prestashop
+      - DB_PASSWD=prestashop_password
+      - DB_NAME=prestashop
+      - PS_INSTALL_AUTO=1
+      - PS_ERASE_DB=0
+      - PS_DEV_MODE=0
+      - PS_HOST_MODE=http://localhost:8080
+      - PS_HANDLE_DYNAMIC_DOMAIN=0
+      - PS_FOLDER_INSTALL=install
+      - PS_COUNTRY=US
+      - PS_LANGUAGE=en
+      - PS_DOMAIN=localhost:8080
+      - ADMIN_MAIL=admin@prestashop.com
+      - ADMIN_PASSWD=password123456789
+    networks:
+      - prestashop-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:80" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  db:
+    image: mariadb:10.5
+    container_name: prestashop_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=prestashop
+      - MYSQL_USER=prestashop
+      - MYSQL_PASSWORD=prestashop_password
+    networks:
+      - prestashop-net
+
+networks:
+  prestashop-net:

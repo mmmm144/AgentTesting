@@ -1,0 +1,382 @@
+[
+  {
+    "task_id": "ps_01",
+    "task_description": "Subscribe to the website via the footer subscription field with email 'account.test.4@mynes.com'.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.alert.alert-success').innerText",
+        "match_type": "contains",
+        "match_value": "You have successfully subscribed to this newsletter.",
+        "description": "Verify that the success message is displayed after subscribing."
+      }
+    }
+  },
+  {
+    "task_id": "ps_02",
+    "task_description": "Search for product 'Printed Dress' and verify result contains the product name.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.product-title a').innerText",
+        "match_type": "contains",
+        "match_value": "The Best Is Yet To Come",
+        "description": "Search results should include 'The Best Is Yet To Come'."
+      }
+    }
+  },
+  {
+    "task_id": "ps_03",
+    "task_description": "Open a product page for 'Printed Dress' and add it to cart; verify cart success message.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('#blockcart-modal .modal-title').innerText",
+        "match_type": "contains",
+        "match_value": "Product successfully added to your shopping cart",
+        "description": "Confirm product added to cart success message."
+      }
+    }
+  },
+  {
+    "task_id": "ps_04",
+    "task_description": "Add a product to the cart from the category listing and verify cart count increased.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.cart-products-count').innerText",
+        "match_type": "contains",
+        "match_value": "(1)",
+        "description": "Verify the cart quantity displays at least '1' after adding."
+      }
+    }
+  },
+  {
+    "task_id": "ps_05",
+    "task_description": "Proceed to checkout as guest and verify the checkout page heading is shown.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('h1').innerText",
+        "match_type": "contains",
+        "match_value": "PERSONAL INFORMATION",
+        "description": "Verify the checkout page is reached (Section 1 Title)."
+      }
+    }
+  },
+  {
+    "task_id": "ps_06",
+    "task_description": "Create a new account with email 'new.user.test1@mynes.com' and verify account creation success message.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.account-created, .alert-success, .confirmation')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "Your account has been created",
+        "description": "Confirm account creation success text is displayed."
+      }
+    }
+  },
+  {
+    "task_id": "ps_07",
+    "task_description": "Log in with an existing account and verify user name appears in header.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.account, .user-info .username, .header_user_info .user-name')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "New User",
+        "description": "Verify logged-in username or welcome message appears in header."
+      }
+    }
+  },
+  {
+    "task_id": "ps_08",
+    "task_description": "Use the contact form to send a message and verify confirmation is displayed.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.contact-confirmation, .alert.alert-success, .contact-form .confirmation')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "Your message has been successfully sent",
+        "description": "Contact form success confirmation should appear."
+      }
+    }
+  },
+  {
+    "task_id": "ps_09",
+    "task_description": "Change the site currency to 'Euro' and verify the currency symbol updates on product prices.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.product-price, .price')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "€",
+        "description": "Product price should display the Euro symbol after switching currency."
+      }
+    }
+  },
+  {
+    "task_id": "ps_10",
+    "task_description": "Filter a category by 'Size: M' and verify at least one product shows the chosen size availability.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "Array.from(document.querySelectorAll('.product-variants, .product-sizes, .variant-list')).map(e=>e.innerText).join(' | ')",
+        "match_type": "contains",
+        "match_value": "M",
+        "description": "Products listed should show size 'M' available."
+      }
+    }
+  },
+  {
+    "task_id": "ps_11",
+    "task_description": "Sort a product listing by 'Price: Lowest' and verify results contain price values (presence of price text).",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.product-price, .price')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "$",
+        "description": "Product prices should be visible after sorting (presence of price text)."
+      }
+    }
+  },
+  {
+    "task_id": "ps_12",
+    "task_description": "Add product to wishlist (requires login) and verify wishlist contains the product.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": true,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.wishlist .product-name, .favorite-list .product-name')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "Printed Dress",
+        "description": "Wishlist should list the chosen product after adding."
+      }
+    }
+  },
+  {
+    "task_id": "ps_13",
+    "task_description": "Compare two products and verify the comparison table shows both product names.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "Array.from(document.querySelectorAll('.compare-list .product-name, .comparison-table .product-name')).map(e=>e.innerText).join(' | ')",
+        "match_type": "contains",
+        "match_value": "Printed Dress",
+        "description": "Comparison page should display product names (at least one expected)."
+      }
+    }
+  },
+  {
+    "task_id": "ps_14",
+    "task_description": "Submit a product review (requires login) and verify the review confirmation message.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": true,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.review-success, .comment-result, .alert-success')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "Your review has been added",
+        "description": "Verify product review submission confirmation."
+      }
+    }
+  },
+  {
+    "task_id": "ps_15",
+    "task_description": "Apply a coupon code during checkout and verify the order summary shows the discount.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.cart-discounts, .discount-applied, .cart-summary .discount')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "Discount",
+        "description": "Order summary should reflect the applied coupon/discount."
+      }
+    }
+  },
+  {
+    "task_id": "ps_16",
+    "task_description": "Navigate to a category page and verify the category title is displayed.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.category-name, .page-heading, h1')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "CLOTHES",
+        "description": "Category page heading or name should be visible."
+      }
+    }
+  },
+  {
+    "task_id": "ps_17",
+    "task_description": "Switch site language to French and verify a known French string appears (e.g., 'Mon compte').",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('body')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "Mon compte",
+        "description": "Switching language should show French text like 'Mon compte'."
+      }
+    }
+  },
+  {
+    "task_id": "ps_18",
+    "task_description": "Use the 'Contact us' menu to open customer service and verify the support page title.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('#main h1, .contact-title, .page-heading')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "Customer service",
+        "description": "Customer service/contact page heading should be present."
+      }
+    }
+  },
+  {
+    "task_id": "ps_19",
+    "task_description": "View product images gallery and verify the gallery shows at least one larger image element.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": false,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('.product-main .thumb, .product-cover img, .product-image-photo')?.getAttribute('src') || ''",
+        "match_type": "contains",
+        "match_value": ".jpg",
+        "description": "Product gallery should contain an image src (e.g., .jpg)."
+      }
+    }
+  },
+  {
+    "task_id": "ps_20",
+    "task_description": "Sign out from an account and verify the login link/button is shown again.",
+    "task_type": "operation",
+    "start_url": "__PRESTASHOP__",
+    "require_login": true,
+    "eval": {
+      "eval_type": [
+        "dom_match"
+      ],
+      "dom_match": {
+        "url": "last",
+        "dom_extractor": "document.querySelector('#_desktop_user_info .user-info a, .login, .login-link')?.innerText || ''",
+        "match_type": "contains",
+        "match_value": "Sign in",
+        "description": "After logout, the sign-in/login link or label should be visible."
+      }
+    }
+  }
+]
